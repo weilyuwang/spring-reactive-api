@@ -2,6 +2,7 @@ package com.weilyu.reactiveapi.fluxandmonoplayground;
 
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 public class FluxAndMonoTest {
@@ -43,6 +44,20 @@ public class FluxAndMonoTest {
                 .expectNext("Spring")
                 .expectNext("Spring Boot")
                 .expectNext("Reactive Spring")
+                .verifyError(RuntimeException.class);
+    }
+
+    @Test
+    public void monoTest() {
+        Mono<String> stringMono = Mono.just("Spring");
+        StepVerifier.create(stringMono)
+                .expectNext("Spring")
+                .verifyComplete();
+    }
+
+    @Test
+    public void monoTestWithError() {
+        StepVerifier.create(Mono.error(new RuntimeException("Expected Error")))
                 .verifyError(RuntimeException.class);
     }
 }
