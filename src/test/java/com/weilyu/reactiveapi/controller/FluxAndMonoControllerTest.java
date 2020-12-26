@@ -10,10 +10,11 @@ import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 // The SpringExtension class is provided by Spring 5 and integrates the Spring TestContext Framework into JUnit 5
@@ -69,5 +70,19 @@ class FluxAndMonoControllerTest {
 
         assertEquals(expectedResults, entityExchangeResult.getResponseBody());
 
+    }
+
+    @Test
+    void flux_test_4() {
+        List<Integer> expectedResults = Arrays.asList(1, 2, 3, 4);
+
+        webTestClient.get().uri("/flux")
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(Integer.class)
+                .consumeWith(response -> {
+                    assertEquals(expectedResults, response.getResponseBody());
+                });
     }
 }
