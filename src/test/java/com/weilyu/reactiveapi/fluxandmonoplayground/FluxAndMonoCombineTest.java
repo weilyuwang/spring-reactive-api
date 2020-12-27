@@ -3,6 +3,7 @@ package com.weilyu.reactiveapi.fluxandmonoplayground;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
+import reactor.test.scheduler.VirtualTimeScheduler;
 
 import java.time.Duration;
 
@@ -55,14 +56,25 @@ public class FluxAndMonoCombineTest {
 
     @Test
     void combineUsingConcatWithDelay() {
+
+        // Enable the virtual time
+        VirtualTimeScheduler.getOrSet();
+
         Flux<String> flux1 = Flux.just("A", "B", "C").delayElements(Duration.ofSeconds(1));
         Flux<String> flux2 = Flux.just("D", "E", "F").delayElements(Duration.ofSeconds(1));
 
         // With concat(), flux2 will wait for flux1 to complete i.e. order maintained
         Flux<String> mergedFlux = Flux.concat(flux1, flux2);
 
-        StepVerifier.create(mergedFlux.log())
+//        StepVerifier.create(mergedFlux.log())
+//                .expectSubscription()
+//                .expectNext("A", "B", "C", "D", "E", "F")
+//                .verifyComplete();
+
+
+        StepVerifier.withVirtualTime(() -> mergedFlux.log())
                 .expectSubscription()
+                .thenAwait(Duration.ofSeconds(6))  // Need to provide the thenAwait()
                 .expectNext("A", "B", "C", "D", "E", "F")
                 .verifyComplete();
     }
