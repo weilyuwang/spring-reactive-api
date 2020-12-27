@@ -49,12 +49,12 @@ public class FluxAndMonoBackPressureTest {
         Flux<Integer> integerFlux = Flux.range(1, 10).log();
 
         integerFlux.subscribe(
-                new BaseSubscriber<Integer>() {
+                new BaseSubscriber<>() {
                     @Override
                     protected void hookOnNext(Integer value) {
                         request(1);
                         System.out.println("Value received is : " + value);
-                        if(value == 4) {
+                        if (value == 4) {
                             cancel();
                         }
                     }
