@@ -104,4 +104,18 @@ class FluxAndMonoControllerTest {
                 .thenCancel()
                 .verify();
     }
+
+    @Test
+    void monoTest() {
+        Integer expectedValue = 1;
+
+        webTestClient.get().uri("/mono")
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange() // exchange() needs to be called in order to connect to the endpoint
+                .expectStatus().isOk()
+                .expectBody(Integer.class)
+                .consumeWith(response -> {
+                    assertEquals(expectedValue, response.getResponseBody());
+                });
+    }
 }
