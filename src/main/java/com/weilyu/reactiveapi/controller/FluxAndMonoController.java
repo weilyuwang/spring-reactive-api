@@ -19,13 +19,11 @@ public class FluxAndMonoController {
                 .log();
     }
 
-
+    // Infinite sequence
     @GetMapping(value = "/fluxstream", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
-    public Flux<Integer> returnFluxStream() {
+    public Flux<Long> returnFluxStream() {
         // In this case, the browser is the subscriber
-        return Flux.just(1, 2, 3, 4)
-                .delayElements(Duration.ofSeconds(1))
-                .log();
+        return Flux.interval(Duration.ofSeconds(1)).log();
     }
 
 }

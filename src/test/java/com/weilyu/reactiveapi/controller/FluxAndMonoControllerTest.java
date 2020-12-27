@@ -1,11 +1,9 @@
 package com.weilyu.reactiveapi.controller;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
@@ -22,7 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 // If you are using JUnit 5, there’s no need to add the equivalent @ExtendWith(SpringExtension.class)
 // as @SpringBootTest and the other @…Test annotations are already annotated with it.
 // Reference https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/html/boot-features-testing.html
-@WebFluxTest  // Reference https://howtodoinjava.com/spring-webflux/webfluxtest-with-webtestclient/
+@WebFluxTest
+        // Reference https://howtodoinjava.com/spring-webflux/webfluxtest-with-webtestclient/
 class FluxAndMonoControllerTest {
 
     @Autowired
@@ -87,5 +86,22 @@ class FluxAndMonoControllerTest {
                 .consumeWith(response -> {
                     assertEquals(expectedResults, response.getResponseBody());
                 });
+    }
+
+    @Test
+    void fluxStream() {
+        Flux<Long> longFlux = webTestClient.get().uri("/fluxstream")
+                .accept(MediaType.APPLICATION_STREAM_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .returnResult(Long.class)
+                .getResponseBody();
+
+        StepVerifier.create(longFlux)
+                .expectNext(0L)
+                .expectNext(1L)
+                .expectNext(2L)
+                .thenCancel()
+                .verify();
     }
 }
