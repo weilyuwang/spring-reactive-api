@@ -18,15 +18,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 // The SpringExtension class is provided by Spring 5 and integrates the Spring TestContext Framework into JUnit 5
-@ExtendWith(SpringExtension.class)
-@WebFluxTest
+//@ExtendWith(SpringExtension.class)
+// If you are using JUnit 5, there’s no need to add the equivalent @ExtendWith(SpringExtension.class)
+// as @SpringBootTest and the other @…Test annotations are already annotated with it.
+// Reference https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/html/boot-features-testing.html
+@WebFluxTest  // Reference https://howtodoinjava.com/spring-webflux/webfluxtest-with-webtestclient/
 class FluxAndMonoControllerTest {
 
     @Autowired
     WebTestClient webTestClient; // Non-blocking web client
 
     @Test
-    void flux_test_1() {
+    void flux_approach_1() {
         Flux<Integer> integerFlux = webTestClient.get().uri("/flux")
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
@@ -44,7 +47,7 @@ class FluxAndMonoControllerTest {
     }
 
     @Test
-    void flux_test_2() {
+    void flux_approach_2() {
         webTestClient.get().uri("/flux")
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
@@ -57,7 +60,7 @@ class FluxAndMonoControllerTest {
 
 
     @Test
-    void flux_test_3() {
+    void flux_approach_3() {
         List<Integer> expectedResults = Arrays.asList(1, 2, 3, 4);
 
         EntityExchangeResult<List<Integer>> entityExchangeResult =
@@ -73,7 +76,7 @@ class FluxAndMonoControllerTest {
     }
 
     @Test
-    void flux_test_4() {
+    void flux_approach_4() {
         List<Integer> expectedResults = Arrays.asList(1, 2, 3, 4);
 
         webTestClient.get().uri("/flux")
