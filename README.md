@@ -35,3 +35,9 @@ brew uninstall mongodb-community
 ```
 brew services restart mongodb-community
 ```
+
+- To verify that MongoDB is running and you started MongoDB as a macOS service
+```
+brew services list
+```
+- You should see the service `mongodb-community` listed as started.
