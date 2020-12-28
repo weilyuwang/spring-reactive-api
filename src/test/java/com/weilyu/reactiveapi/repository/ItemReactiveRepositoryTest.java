@@ -62,4 +62,14 @@ class ItemReactiveRepositoryTest {
                 .expectNextCount(1)
                 .verifyComplete();
     }
+
+    @Test
+    void saveItem() {
+        Item itemToSave = new Item(null, "Google Home Mini", 30.00);
+        Mono<Item> savedItem = itemReactiveRepository.save(itemToSave);
+        StepVerifier.create(savedItem.log("savedItem: "))
+                .expectSubscription()
+                .expectNextMatches(item -> item.getId() != null && item.getDescription().equals("Google Home Mini"))
+                .verifyComplete();
+    }
 }
