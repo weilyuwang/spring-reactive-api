@@ -54,4 +54,12 @@ class ItemReactiveRepositoryTest {
                 .expectNextMatches(item -> item.getDescription().equals("Beats Headphones"))
                 .verifyComplete();
     }
+
+    @Test
+    void findByDescription() {
+        StepVerifier.create(itemReactiveRepository.findByDescription("Samsung TV"))
+                .expectSubscription()
+                .expectNextCount(1)
+                .verifyComplete();
+    }
 }
