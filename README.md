@@ -40,4 +40,4 @@ brew services restart mongodb-community
 ```
 brew services list
 ```
-- You should see the service `mongodb-community` listed as started.
+- You should see the service `mongodb-community` listed as `started`.
