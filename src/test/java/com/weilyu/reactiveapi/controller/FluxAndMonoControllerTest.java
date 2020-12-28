@@ -20,8 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 // If you are using JUnit 5, there’s no need to add the equivalent @ExtendWith(SpringExtension.class)
 // as @SpringBootTest and the other @…Test annotations are already annotated with it.
 // Reference https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/html/boot-features-testing.html
-@WebFluxTest
-        // Reference https://howtodoinjava.com/spring-webflux/webfluxtest-with-webtestclient/
+@WebFluxTest  // Reference https://howtodoinjava.com/spring-webflux/webfluxtest-with-webtestclient/
 class FluxAndMonoControllerTest {
 
     @Autowired
