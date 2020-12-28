@@ -1,6 +1,6 @@
 # spring-reactive-api
 
-Learn how to build and test Reactive APIs with Spring Boot & Project Reactor
+Learn how to build and test Reactive RESTful APIs with Spring WebFlux & Project Reactor along with JUnit5.
 
 ### Run the application in your local
 
