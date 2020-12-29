@@ -72,4 +72,54 @@ class ItemReactiveRepositoryTest {
                 .expectNextMatches(item -> item.getId() != null && item.getDescription().equals("Google Home Mini"))
                 .verifyComplete();
     }
+
+    @Test
+    void updateItem() {
+        double newPrice = 520.00;
+
+        Flux<Item> updatedItem = itemReactiveRepository.findByDescription("LG TV")
+                .map(item -> {
+                    item.setPrice(newPrice);
+                    return item;
+                })
+                .flatMap(item -> itemReactiveRepository.save(item)); // Flux<Mono<Item>> --> Flux<Item>
+
+        StepVerifier.create(updatedItem.log())
+                .expectSubscription()
+                .expectNextMatches(item -> item.getPrice() == 520.00)
+                .verifyComplete();
+    }
+
+    @Test
+    void deleteItemById() {
+
+        Mono<Void> deletedItem = itemReactiveRepository.findById("123") // Mono<Item>
+                .map(Item::getId)
+                .flatMap(id -> itemReactiveRepository.deleteById(id));  // Use flatMap to flatten Mono<Mono<Void>> to Mono<Void>
+
+        StepVerifier.create(deletedItem)
+                .expectSubscription()
+                .verifyComplete();
+
+        StepVerifier.create(itemReactiveRepository.findAll().log("New Item list: "))
+                .expectSubscription()
+                .expectNextCount(3)
+                .verifyComplete();
+    }
+
+    @Test
+    void deleteItem() {
+
+        Flux<Void> deletedItem = itemReactiveRepository.findByDescription("LG TV") // Mono<Item>
+                .flatMap(item -> itemReactiveRepository.delete(item));  // Use flatMap to flatten Flux<Mono<Void>> to Mono<Void>
+
+        StepVerifier.create(deletedItem)
+                .expectSubscription()
+                .verifyComplete();
+
+        StepVerifier.create(itemReactiveRepository.findAll().log("New Item list: "))
+                .expectSubscription()
+                .expectNextCount(3)
+                .verifyComplete();
+    }
 }
