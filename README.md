@@ -1,7 +1,6 @@
 [![CircleCI](https://circleci.com/gh/weilyuwang/spring-reactive-api.svg?style=svg)](https://app.circleci.com/pipelines/github/weilyuwang/spring-reactive-api)
 
 
-
 # spring-reactive-api
 
 Learn how to build and test Reactive RESTful APIs with Spring WebFlux & Project Reactor along with JUnit5.
