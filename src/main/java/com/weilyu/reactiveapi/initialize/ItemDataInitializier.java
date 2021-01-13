@@ -32,7 +32,7 @@ public class ItemDataInitializier implements CommandLineRunner {
                 new Item(null, "Samsung TV", 399.99),
                 new Item(null, "LG TV", 329.99),
                 new Item(null, "Apple Watch", 349.99),
-                new Item("abc", "Beats HeadPhones", 149.99));
+                new Item(null, "Beats HeadPhones", 149.99));
     }
 
     private void initialDataSetup() {
@@ -41,6 +41,6 @@ public class ItemDataInitializier implements CommandLineRunner {
                 .thenMany(Flux.fromIterable(data()))
                 .flatMap(itemReactiveRepository::save)
                 .thenMany(itemReactiveRepository.findAll())
-                .subscribe(item -> log.info("Item inserted from CommandLineRunner"));
+                .subscribe(item -> log.info("Item inserted from CommandLineRunner: " + item));
     }
 }
