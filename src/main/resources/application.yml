@@ -15,7 +15,7 @@ spring:
 spring:
   config:
     activate:
-      on-profile: test
+      on-profile: qa
   data:
     mongodb:
       host: localhost
@@ -26,3 +26,8 @@ spring:
   config:
     activate:
       on-profile: prod
+---
+spring:
+  config:
+    activate:
+      on-profile: test

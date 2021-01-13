@@ -3,10 +3,13 @@ package com.weilyu.reactiveapi.controller.v1;
 import com.weilyu.reactiveapi.document.Item;
 import com.weilyu.reactiveapi.repository.ItemReactiveRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 
@@ -14,10 +17,9 @@ import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest
-@DirtiesContext
-// It indicates the associated test or class modifies the ApplicationContext. It tells the testing framework to close and recreate the context for later tests.
-@AutoConfigureWebTestClient
-        // Annotation that can be applied to a test class to enable a WebTestClient.
+@DirtiesContext  // It indicates the associated test or class modifies the ApplicationContext. It tells the testing framework to close and recreate the context for later tests.
+@AutoConfigureWebTestClient   // Annotation that can be applied to a test class to enable a WebTestClient.
+@ActiveProfiles("test")
 class ItemControllerTest {
 
     @Autowired
@@ -41,5 +43,15 @@ class ItemControllerTest {
                 .flatMap(item -> itemReactiveRepository.save(item))
                 .doOnNext(item -> System.out.println("Inserted item is : " + item))
                 .blockLast();
+    }
+
+    @Test
+    public void getAllItems() {
+        webTestClient.get().uri("/api/v1/items")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBodyList(Item.class)
+                .hasSize(4);
     }
 }

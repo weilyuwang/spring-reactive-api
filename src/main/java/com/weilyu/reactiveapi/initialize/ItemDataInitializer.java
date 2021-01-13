@@ -5,6 +5,7 @@ import com.weilyu.reactiveapi.document.Item;
 import com.weilyu.reactiveapi.repository.ItemReactiveRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
@@ -14,11 +15,12 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class ItemDataInitializier implements CommandLineRunner {
+@Profile("!test") // Do not run this when active profile == test
+public class ItemDataInitializer implements CommandLineRunner {
 
     private final ItemReactiveRepository itemReactiveRepository;
 
-    public ItemDataInitializier(ItemReactiveRepository itemReactiveRepository) {
+    public ItemDataInitializer(ItemReactiveRepository itemReactiveRepository) {
         this.itemReactiveRepository = itemReactiveRepository;
     }
 
@@ -41,6 +43,6 @@ public class ItemDataInitializier implements CommandLineRunner {
                 .thenMany(Flux.fromIterable(data()))
                 .flatMap(itemReactiveRepository::save)
                 .thenMany(itemReactiveRepository.findAll())
-                .subscribe(item -> log.info("Item inserted from CommandLineRunner: " + item));
+                .subscribe(item -> log.info("Item inserted from CommandLineRunner: " + item)); // We should never call block/blockLast in the actual reactive code
     }
 }
